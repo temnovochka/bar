@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vinoteka.gui.controller.ClientViewController">
+    <children>
+        <Button fx:id="existedOrdersButton" layoutX="264.0" layoutY="169.0" mnemonicParsing="false" onAction="#onExistedOrdersButtonClicked" text="My orders" />
+        <Button fx:id="newOrderButton" layoutX="246.0" layoutY="237.0" mnemonicParsing="false" onAction="#onNewOrderButtonClicked" text="Create new order" />
+        <Button fx:id="confirmOrderButton" layoutX="246.0" layoutY="350.0" mnemonicParsing="false" onAction="#onConfirmOrderButtonClicked" text="Confirm order" />
+        <Button fx:id="logoutButton" layoutX="29.0" layoutY="33.0" mnemonicParsing="false" onAction="#onLogoutButtonClicked" text="logout" />
+        <Button fx:id="backButton" layoutX="17.0" layoutY="70.0" mnemonicParsing="false" onAction="#onBackButtonClicked" text="main menu" />
+        <Button fx:id="payButton" layoutX="246.0" layoutY="350.0" mnemonicParsing="false" onAction="#onPayButtonClicked" text="pay" />
+
+        <ListView fx:id="productList" layoutX="111.0" layoutY="58.0" prefHeight="284.0" prefWidth="217.0" />
+        <ListView fx:id="existedOrdersList" layoutX="157.0" layoutY="58.0" prefHeight="284.0" prefWidth="290.0" />
+        <ListView fx:id="selectedProductsForOrderList" layoutX="362.0" layoutY="58.0" prefHeight="284.0" prefWidth="217.0" />
+
+        <Label fx:id="messageLabel" layoutX="94.0" layoutY="82.0" text="Your account will be confirmed by manager. Then you will be able to make an order." />
+        <Label fx:id="messageConfirmedOrderLabel" layoutX="163.0" layoutY="186.0" text="Your order confirmed. You can find it in 'My orders'." />
+        <Label fx:id="messagePaidOrderLabel" layoutX="163.0" layoutY="186.0" text="Your order has been paid. Now you can bring it from the shop." />
+    </children>
+</AnchorPane>

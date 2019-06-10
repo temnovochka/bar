@@ -1,0 +1,14 @@
+package vinoteka.db.table
+
+import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.sql.ReferenceOption
+import vinoteka.model.OrderStatus
+
+object PurchaseTable : IntIdTable("purchase") {
+    val manager = reference("manager_id", ManagerTable, ReferenceOption.CASCADE)
+    val admin = reference("admin_id", AdminTable, ReferenceOption.CASCADE)
+    val supplier = varchar("supplier", 100)
+    val formedDate = date("formed_date")
+    val executionDate = date("execution_date").nullable()
+    val status = enumerationByName("status", 20, OrderStatus::class)
+}

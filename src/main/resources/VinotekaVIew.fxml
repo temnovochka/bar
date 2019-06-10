@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vinoteka.gui.controller.VinotekaViewController">
+    <children>
+        <Button fx:id="logInButton" layoutX="224.0" layoutY="271.0" mnemonicParsing="false" onAction="#onLogInButtonClicked" prefHeight="25.0" prefWidth="72.0" text="log in" />
+      <Button fx:id="registerButton" layoutX="318.0" layoutY="271.0" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="25.0" prefWidth="79.0" text="register" />
+      <PasswordField fx:id="passwordField" layoutX="236.0" layoutY="209.0" promptText="password" />
+      <TextField fx:id="logInField" layoutX="236.0" layoutY="158.0" promptText="login" />
+    </children>
+</AnchorPane>

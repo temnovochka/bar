@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="vinoteka.gui.controller.ManagerViewController"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <Button fx:id="logoutButton" layoutX="29.0" layoutY="33.0" mnemonicParsing="false" onAction="#onLogoutButtonClicked" text="logout" />
+        <Button fx:id="backButton" layoutX="34.0" layoutY="70.0" mnemonicParsing="false" onAction="#onBackButtonClicked" text="back" />
+        <Button fx:id="confirmNewClientsButton" layoutX="264.0" layoutY="169.0" mnemonicParsing="false" onAction="#onConfirmNewClientsButtonClicked" text="Confirm new clients" />
+        <Button fx:id="registerOrderButton" layoutX="264.0" layoutY="209.0" mnemonicParsing="false" onAction="#onRegisterOrderButtonClicked" text="Register new orders" />
+        <Button fx:id="checkAllRegisteredOrdersButton" layoutX="264.0" layoutY="289.0" mnemonicParsing="false" onAction="#onCheckAllRegisteredOrdersButtonClicked" text="Check all registered orders" />
+        <Button fx:id="formNewPurchaseButton" layoutX="264.0" layoutY="249.0" mnemonicParsing="false" onAction="#onFormNewPurchaseButtonClicked" text="Form new purchase" />
+
+        <ListView fx:id="ordersList" layoutX="157.0" layoutY="58.0" prefHeight="284.0" prefWidth="290.0" />
+        <ListView fx:id="clientsList" layoutX="157.0" layoutY="58.0" prefHeight="284.0" prefWidth="290.0" />
+
+        <ListView fx:id="productsInStockList" layoutX="111.0" layoutY="58.0" prefHeight="284.0" prefWidth="217.0" />
+        <ListView fx:id="selectedProductsForPurchaseList" layoutX="362.0" layoutY="58.0" prefHeight="284.0" prefWidth="217.0" />
+
+        <Button fx:id="confirmClientButton" layoutX="246.0" layoutY="350.0" mnemonicParsing="false" onAction="#onConfirmClientButtonClicked" text="confirm" />
+        <Button fx:id="confirmOrderButton" layoutX="246.0" layoutY="350.0" mnemonicParsing="false" onAction="#onConfirmOrderButtonClicked" text="in progress" />
+        <Button fx:id="addIntoPurchaseButton" layoutX="246.0" layoutY="350.0" mnemonicParsing="false" onAction="#onAddIntoPurchaseButtonButtonClicked" text="add into purchase" />
+
+        <Label fx:id="confirmClientLabel" layoutX="94.0" layoutY="82.0" text="Client was confirmed." />
+        <Label fx:id="confirmOrderLabel" layoutX="94.0" layoutY="82.0" text="Order status was changed to in_progress." />
+        <Label fx:id="checkOrderLabel" layoutX="94.0" layoutY="82.0" text="Orders with statuses in_progress were checked." />
+        <Label fx:id="addIntoPurchaseLabel" layoutX="163.0" layoutY="186.0" text="Products were added into purchase." />
+    </children>
+
+</AnchorPane>
