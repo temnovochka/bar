@@ -9,7 +9,7 @@ class Purchase(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Purchase>(PurchaseTable)
 
     var manager by Manager referencedOn PurchaseTable.manager
-    var admin by Admin referencedOn PurchaseTable.admin
+    var admin by Admin optionalReferencedOn PurchaseTable.admin
     var supplier by PurchaseTable.supplier
     var formedDate by PurchaseTable.formedDate
     var executionDate by PurchaseTable.executionDate

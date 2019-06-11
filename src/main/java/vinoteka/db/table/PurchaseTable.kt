@@ -6,8 +6,8 @@ import vinoteka.model.OrderStatus
 
 object PurchaseTable : IntIdTable("purchase") {
     val manager = reference("manager_id", ManagerTable, ReferenceOption.CASCADE)
-    val admin = reference("admin_id", AdminTable, ReferenceOption.CASCADE)
-    val supplier = varchar("supplier", 100)
+    val admin = reference("admin_id", AdminTable, ReferenceOption.CASCADE).nullable()
+    val supplier = varchar("supplier", 100).nullable()
     val formedDate = date("formed_date")
     val executionDate = date("execution_date").nullable()
     val status = enumerationByName("status", 20, OrderStatus::class)

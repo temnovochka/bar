@@ -63,7 +63,6 @@ object BPFacadeManagerImpl : BPFacadeManager {
     override fun makeManagerPurchase(intoPurchase: Map<Stock, Int>, manager: Manager) = bpTransaction {
         val purchase = Purchase.new {
             this.manager = manager
-            this.executionDate = null
             this.formedDate = DateTime.now()
             this.status = OrderStatus.NEW
         }

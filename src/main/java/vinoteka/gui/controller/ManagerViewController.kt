@@ -177,8 +177,10 @@ class ManagerViewController {
                 override fun updateItem(item: Stock?, empty: Boolean) {
                     super.updateItem(item, empty)
                     if (empty) text = null
-                    transaction {
-                        text = "product = ${item?.product?.name}"
+                    else {
+                        transaction {
+                            text = "product = ${item?.product?.name}"
+                        }
                     }
                 }
             }
@@ -265,6 +267,9 @@ class ManagerViewController {
         registerOrderButton.isVisible = false
         formNewPurchaseButton.isVisible = false
         ordersList.isVisible = false
+        addIntoPurchaseButton.isVisible = false
+        selectedProductsForPurchaseList.isVisible = false
+        productsInStockList.isVisible = false
         addIntoPurchaseLabel.isVisible = true
 
         val intoPurchase = selectedProductsForPurchaseList.items.groupBy { it }.mapValues { (_, v) -> v.size }
