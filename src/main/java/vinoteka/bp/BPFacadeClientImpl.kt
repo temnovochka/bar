@@ -1,10 +1,31 @@
 package vinoteka.bp
 
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
+import vinoteka.db.table.ListOfProductsTable
 import vinoteka.db.table.OrderTable
 import vinoteka.model.*
 
 object BPFacadeClientImpl : BPFacadeClient {
+    override fun isOrderForPay(order: Order) = bpTransaction {
+        order.status == OrderStatus.DONE && order.paymentStatus == PaymentStatus.NOT_PAID
+    }
+
+    override fun isConfirmed(client: Client) = bpTransaction {
+        client.isConfirmed
+    }
+
+    override fun getOrderDetail(client: Client, order: Order): BPResult<List<String>> {
+        val res = mutableListOf<String>()
+        transaction {
+            val productsInOrder = ListOfProducts.find { ListOfProductsTable.order eq order.id }.toList()
+            for (prod in productsInOrder) {
+                res.add("${prod.product.name} - ${prod.number}")
+            }
+        }
+        return res.success()
+    }
+
     override fun getClientOrders(client: Client) = bpTransaction {
         Order.find { OrderTable.client eq client.id }.toList()
     }

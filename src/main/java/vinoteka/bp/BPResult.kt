@@ -12,7 +12,7 @@ sealed class BPResult<T> {
         is Fail -> onFail(message)
     }
 
-    inline fun  getOr(onError: (String) -> Nothing): T = when(this){
+    inline fun getOr(onError: (String) -> Nothing): T = when (this) {
         is Success -> result
         is Fail -> onError(message)
     }

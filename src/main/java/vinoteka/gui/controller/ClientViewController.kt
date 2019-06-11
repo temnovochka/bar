@@ -15,13 +15,18 @@ class ClientViewController {
     @FXML lateinit var existedOrdersButton: Button
     @FXML lateinit var newOrderButton: Button
     @FXML lateinit var logoutButton: Button
-    @FXML lateinit var backButton: Button
-    @FXML lateinit var productList: ListView<Product>
-    @FXML lateinit var messageLabel: Label
-    @FXML lateinit var existedOrdersList: ListView<Order>
+    @FXML lateinit var mainMenuButton: Button
     @FXML lateinit var confirmOrderButton: Button
-    @FXML lateinit var selectedProductsForOrderList: ListView<Product>
     @FXML lateinit var payButton: Button
+    @FXML lateinit var orderDetailButton: Button
+    @FXML lateinit var backFromDetailButton: Button
+
+    @FXML lateinit var selectedProductsForOrderList: ListView<Product>
+    @FXML lateinit var productList: ListView<Product>
+    @FXML lateinit var existedOrdersList: ListView<Order>
+    @FXML lateinit var orderDetailList: ListView<String>
+
+    @FXML lateinit var messageLabel: Label
     @FXML lateinit var messageConfirmedOrderLabel: Label
     @FXML lateinit var messagePaidOrderLabel: Label
 
@@ -32,14 +37,24 @@ class ClientViewController {
         productList.isVisible = false
         existedOrdersList.isVisible = false
         messageLabel.isVisible = false
-        backButton.isVisible = false
+        mainMenuButton.isVisible = false
         confirmOrderButton.isVisible = false
         selectedProductsForOrderList.isVisible = false
         payButton.isVisible = false
         messageConfirmedOrderLabel.isVisible = false
         messagePaidOrderLabel.isVisible = false
+        orderDetailButton.isVisible = false
+        orderDetailList.isVisible = false
+        backFromDetailButton.isVisible = false
 
-        if (!client.isConfirmed) {
+        if (!Client.isConfirmed(client).getOr {
+                val errorAlert = Alert(Alert.AlertType.ERROR)
+                errorAlert.headerText = "Error"
+                errorAlert.contentText = it
+                errorAlert.showAndWait()
+                init(client)
+                return
+            }) {
             newOrderButton.isDisable = true
             existedOrdersButton.isDisable = true
             messageLabel.isVisible = true
@@ -51,7 +66,8 @@ class ClientViewController {
         existedOrdersButton.isVisible = false
         newOrderButton.isVisible = false
         existedOrdersList.isVisible = true
-        backButton.isVisible = true
+        mainMenuButton.isVisible = true
+        orderDetailButton.isVisible = true
 
         val list = FXCollections.observableArrayList<Order>()
         existedOrdersList.items = list
@@ -79,7 +95,7 @@ class ClientViewController {
 
         existedOrdersList.setOnMouseClicked {
             val order = existedOrdersList.selectionModel.selectedItems.first()
-            payButton.isVisible = order.status == OrderStatus.DONE && order.paymentStatus == PaymentStatus.NOT_PAID
+            payButton.isVisible = Client.isOrderForPay(order).getOr { return@setOnMouseClicked }
         }
 
     }
@@ -89,7 +105,7 @@ class ClientViewController {
         existedOrdersButton.isVisible = false
         newOrderButton.isVisible = false
         productList.isVisible = true
-        backButton.isVisible = true
+        mainMenuButton.isVisible = true
         confirmOrderButton.isVisible = true
         selectedProductsForOrderList.isVisible = true
 
@@ -139,7 +155,7 @@ class ClientViewController {
     }
 
     @FXML
-    fun onBackButtonClicked(actionEvent: ActionEvent) {
+    fun onMainMenuButtonClicked(actionEvent: ActionEvent) {
         init(client)
     }
 
@@ -149,12 +165,19 @@ class ClientViewController {
         existedOrdersButton.isVisible = false
         newOrderButton.isVisible = false
         productList.isVisible = false
-        backButton.isVisible = true
+        mainMenuButton.isVisible = true
         confirmOrderButton.isVisible = false
         selectedProductsForOrderList.isVisible = false
 
         val orderDetail = selectedProductsForOrderList.items.groupBy { it }.mapValues { (_, v) -> v.size }
-        Client.formOrder(client, orderDetail)
+        Client.formOrder(client, orderDetail).getOr {
+            val errorAlert = Alert(Alert.AlertType.ERROR)
+            errorAlert.headerText = "Error"
+            errorAlert.contentText = it
+            errorAlert.showAndWait()
+            init(client)
+            return
+        }
     }
 
     @FXML
@@ -165,9 +188,10 @@ class ClientViewController {
         existedOrdersButton.isVisible = false
         newOrderButton.isVisible = false
         productList.isVisible = false
-        backButton.isVisible = true
+        mainMenuButton.isVisible = true
         confirmOrderButton.isVisible = false
         selectedProductsForOrderList.isVisible = false
+        orderDetailButton.isVisible = false
 
         val order = existedOrdersList.selectionModel.selectedItems.first()
         Client.payOrder(client, order).getOr {
@@ -178,6 +202,31 @@ class ClientViewController {
             init(client)
             return
         }
+    }
+
+    fun onOrderDetailButtonClicked(actionEvent: ActionEvent) {
+        orderDetailButton.isVisible = false
+        existedOrdersList.isVisible = false
+        orderDetailList.isVisible = true
+        backFromDetailButton.isVisible = true
+
+        val order = existedOrdersList.selectionModel.selectedItems.first()
+        val res = Client.getOrderDetail(client, order).getOr {
+            val errorAlert = Alert(Alert.AlertType.ERROR)
+            errorAlert.headerText = "Error"
+            errorAlert.contentText = it
+            errorAlert.showAndWait()
+            init(client)
+            return
+        }
+
+        orderDetailList.items = FXCollections.observableArrayList(res)
+    }
+
+    fun onBackFromDetailButtonClicked(actionEvent: ActionEvent) {
+        orderDetailList.isVisible = false
+        backFromDetailButton.isVisible = false
+        onExistedOrdersButtonClicked(actionEvent)
     }
 
 }

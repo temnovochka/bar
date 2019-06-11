@@ -11,12 +11,16 @@
         <Button fx:id="newOrderButton" layoutX="246.0" layoutY="237.0" mnemonicParsing="false" onAction="#onNewOrderButtonClicked" text="Create new order" />
         <Button fx:id="confirmOrderButton" layoutX="246.0" layoutY="350.0" mnemonicParsing="false" onAction="#onConfirmOrderButtonClicked" text="Confirm order" />
         <Button fx:id="logoutButton" layoutX="29.0" layoutY="33.0" mnemonicParsing="false" onAction="#onLogoutButtonClicked" text="logout" />
-        <Button fx:id="backButton" layoutX="17.0" layoutY="70.0" mnemonicParsing="false" onAction="#onBackButtonClicked" text="main menu" />
+        <Button fx:id="mainMenuButton" layoutX="17.0" layoutY="70.0" mnemonicParsing="false" onAction="#onMainMenuButtonClicked" text="main menu" />
         <Button fx:id="payButton" layoutX="246.0" layoutY="350.0" mnemonicParsing="false" onAction="#onPayButtonClicked" text="pay" />
+        <Button fx:id="orderDetailButton" layoutX="296.0" layoutY="350.0" mnemonicParsing="false" onAction="#onOrderDetailButtonClicked" text="details" />
+        <Button fx:id="backFromDetailButton" layoutX="296.0" layoutY="350.0" mnemonicParsing="false" onAction="#onBackFromDetailButtonClicked" text="back to orders" />
 
         <ListView fx:id="productList" layoutX="111.0" layoutY="58.0" prefHeight="284.0" prefWidth="217.0" />
-        <ListView fx:id="existedOrdersList" layoutX="157.0" layoutY="58.0" prefHeight="284.0" prefWidth="290.0" />
         <ListView fx:id="selectedProductsForOrderList" layoutX="362.0" layoutY="58.0" prefHeight="284.0" prefWidth="217.0" />
+
+        <ListView fx:id="existedOrdersList" layoutX="157.0" layoutY="58.0" prefHeight="284.0" prefWidth="290.0" />
+        <ListView fx:id="orderDetailList" layoutX="157.0" layoutY="58.0" prefHeight="284.0" prefWidth="290.0" />
 
         <Label fx:id="messageLabel" layoutX="94.0" layoutY="82.0" text="Your account will be confirmed by manager. Then you will be able to make an order." />
         <Label fx:id="messageConfirmedOrderLabel" layoutX="163.0" layoutY="186.0" text="Your order confirmed. You can find it in 'My orders'." />
