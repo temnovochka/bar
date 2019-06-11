@@ -35,27 +35,32 @@ object BPFacadeManagerImpl : BPFacadeManager {
             val stock = Stock.all().map { it.product to it.number }.toMap()
 
             val newNumberPerProduct = mutableMapOf<Stock, Int>()
+            var isNotEnough = false
 
             for ((prod, num) in prodInOrder) {
                 val numInStock = stock.getOrDefault(prod, 0)
                 if (num <= numInStock) {
-                    val stockProd = Stock[prod.id]
-                    newNumberPerProduct[stockProd] = stockProd.number - num
+                    newNumberPerProduct[Stock[prod.id]] = Stock[prod.id].number - num
                 } else {
-                    order.status = OrderStatus.NOT_DONE
-                    order.executionDate = DateTime.now()
-                    continue
+                    isNotEnough = true
+                    break
                 }
             }
 
-            for ((oneStock, num) in newNumberPerProduct) {
-                oneStock.number = num
-                oneStock.manager = manager
-                oneStock.dateUpdate = DateTime.now()
-            }
-
-            order.status = OrderStatus.DONE
             order.executionDate = DateTime.now()
+
+            when (isNotEnough) {
+                true -> order.status = OrderStatus.NOT_DONE
+                else -> {
+                    order.status = OrderStatus.DONE
+
+                    for ((oneStock, num) in newNumberPerProduct) {
+                        oneStock.number = num
+                        oneStock.manager = manager
+                        oneStock.dateUpdate = DateTime.now()
+                    }
+                }
+            }
         }
         orders
     }
