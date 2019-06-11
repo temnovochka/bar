@@ -10,18 +10,12 @@ import vinoteka.gui.Vinoteka
 
 class RegisterViewController {
 
-    @FXML
-    lateinit var registerButton: Button
-    @FXML
-    lateinit var logInField: TextField
-    @FXML
-    lateinit var passwordField: PasswordField
-    @FXML
-    lateinit var nameField: TextField
-    @FXML
-    lateinit var documentField: TextField
-    @FXML
-    lateinit var birthdayField: DatePicker
+    @FXML lateinit var registerButton: Button
+    @FXML lateinit var logInField: TextField
+    @FXML lateinit var passwordField: PasswordField
+    @FXML lateinit var nameField: TextField
+    @FXML lateinit var documentField: TextField
+    @FXML lateinit var birthdayField: DatePicker
 
     fun init() {}
 

@@ -15,14 +15,10 @@ import vinoteka.model.Manager
 
 class VinotekaViewController {
 
-    @FXML
-    lateinit var logInButton: Button
-    @FXML
-    lateinit var registerButton: Button
-    @FXML
-    lateinit var logInField: TextField
-    @FXML
-    lateinit var passwordField: PasswordField
+    @FXML lateinit var logInButton: Button
+    @FXML lateinit var registerButton: Button
+    @FXML lateinit var logInField: TextField
+    @FXML lateinit var passwordField: PasswordField
 
     @FXML
     fun onLogInButtonClicked(actionEvent: ActionEvent) {

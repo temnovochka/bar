@@ -12,40 +12,23 @@ import vinoteka.model.*
 class ManagerViewController {
     lateinit var manager: Manager
 
-    @FXML
-    lateinit var logoutButton: Button
-    @FXML
-    lateinit var backButton: Button
-    @FXML
-    lateinit var confirmNewClientsButton: Button
-    @FXML
-    lateinit var checkAllRegisteredOrdersButton: Button
-    @FXML
-    lateinit var registerOrderButton: Button
-    @FXML
-    lateinit var formNewPurchaseButton: Button
-    @FXML
-    lateinit var confirmOrderButton: Button
-    @FXML
-    lateinit var confirmClientButton: Button
-    @FXML
-    lateinit var addIntoPurchaseButton: Button
-    @FXML
-    lateinit var ordersList: ListView<Order>
-    @FXML
-    lateinit var clientsList: ListView<Client>
-    @FXML
-    lateinit var productsInStockList: ListView<Stock>
-    @FXML
-    lateinit var selectedProductsForPurchaseList: ListView<Stock>
-    @FXML
-    lateinit var confirmClientLabel: Label
-    @FXML
-    lateinit var confirmOrderLabel: Label
-    @FXML
-    lateinit var checkOrderLabel: Label
-    @FXML
-    lateinit var addIntoPurchaseLabel: Label
+    @FXML lateinit var logoutButton: Button
+    @FXML lateinit var backButton: Button
+    @FXML lateinit var confirmNewClientsButton: Button
+    @FXML lateinit var checkAllRegisteredOrdersButton: Button
+    @FXML lateinit var registerOrderButton: Button
+    @FXML lateinit var formNewPurchaseButton: Button
+    @FXML lateinit var confirmOrderButton: Button
+    @FXML lateinit var confirmClientButton: Button
+    @FXML lateinit var addIntoPurchaseButton: Button
+    @FXML lateinit var ordersList: ListView<Order>
+    @FXML lateinit var clientsList: ListView<Client>
+    @FXML lateinit var productsInStockList: ListView<Stock>
+    @FXML lateinit var selectedProductsForPurchaseList: ListView<Stock>
+    @FXML lateinit var confirmClientLabel: Label
+    @FXML lateinit var confirmOrderLabel: Label
+    @FXML lateinit var checkOrderLabel: Label
+    @FXML lateinit var addIntoPurchaseLabel: Label
 
     fun init(manager: Manager) {
         this.manager = manager
@@ -103,7 +86,7 @@ class ManagerViewController {
             }
         }
 
-        clientsList.items.addAll(Vinoteka.bp.getClients().getOr {
+        clientsList.items.addAll(Manager.getClients().getOr {
             val errorAlert = Alert(Alert.AlertType.ERROR)
             errorAlert.headerText = "Error"
             errorAlert.contentText = it
@@ -144,7 +127,7 @@ class ManagerViewController {
             }
         }
 
-        ordersList.items.addAll(Vinoteka.bp.getManagerOrders().getOr {
+        ordersList.items.addAll(Manager.getManagerOrders().getOr {
             val errorAlert = Alert(Alert.AlertType.ERROR)
             errorAlert.headerText = "Error"
             errorAlert.contentText = it
@@ -223,7 +206,7 @@ class ManagerViewController {
         confirmClientLabel.isVisible = true
 
         val client = clientsList.selectionModel.selectedItems.first()
-        Vinoteka.bp.confirmClient(client).getOr {
+        Manager.confirmClient(client).getOr {
             val errorAlert = Alert(Alert.AlertType.ERROR)
             errorAlert.headerText = "Error"
             errorAlert.contentText = it
@@ -244,7 +227,7 @@ class ManagerViewController {
         confirmOrderLabel.isVisible = true
 
         val order = ordersList.selectionModel.selectedItems.first()
-        Vinoteka.bp.confirmOrder(order, manager).getOr {
+        Manager.confirmOrder(order, manager).getOr {
             val errorAlert = Alert(Alert.AlertType.ERROR)
             errorAlert.headerText = "Error"
             errorAlert.contentText = it
@@ -264,7 +247,7 @@ class ManagerViewController {
         ordersList.isVisible = false
         checkOrderLabel.isVisible = true
 
-        Vinoteka.bp.checkOrders(manager).getOr {
+        Manager.checkOrders(manager).getOr {
             val errorAlert = Alert(Alert.AlertType.ERROR)
             errorAlert.headerText = "Error"
             errorAlert.contentText = it
@@ -285,7 +268,7 @@ class ManagerViewController {
         addIntoPurchaseLabel.isVisible = true
 
         val intoPurchase = selectedProductsForPurchaseList.items.groupBy { it }.mapValues { (_, v) -> v.size }
-        Vinoteka.bp.makeManagerPurchase(intoPurchase, manager).getOr {
+        Manager.makeManagerPurchase(intoPurchase, manager).getOr {
             val errorAlert = Alert(Alert.AlertType.ERROR)
             errorAlert.headerText = "Error"
             errorAlert.contentText = it

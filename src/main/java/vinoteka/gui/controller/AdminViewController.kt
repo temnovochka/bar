@@ -9,16 +9,11 @@ import vinoteka.model.Admin
 class AdminViewController {
     lateinit var admin: Admin
 
-    @FXML
-    lateinit var logoutButton: Button
-    @FXML
-    lateinit var backButton: Button
-    @FXML
-    lateinit var checkPurchasesButton: Button
-    @FXML
-    lateinit var formPurchaseButton: Button
-    @FXML
-    lateinit var getNewWineButton: Button
+    @FXML lateinit var logoutButton: Button
+    @FXML lateinit var backButton: Button
+    @FXML lateinit var checkPurchasesButton: Button
+    @FXML lateinit var formPurchaseButton: Button
+    @FXML lateinit var getNewWineButton: Button
 
     fun init(admin: Admin) {
         this.admin = admin

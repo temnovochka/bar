@@ -12,26 +12,16 @@ import vinoteka.model.*
 class ClientViewController {
     lateinit var client: Client
 
-    @FXML
-    lateinit var existedOrdersButton: Button
-    @FXML
-    lateinit var newOrderButton: Button
-    @FXML
-    lateinit var logoutButton: Button
-    @FXML
-    lateinit var backButton: Button
-    @FXML
-    lateinit var productList: ListView<Product>
-    @FXML
-    lateinit var messageLabel: Label
-    @FXML
-    lateinit var existedOrdersList: ListView<Order>
-    @FXML
-    lateinit var confirmOrderButton: Button
-    @FXML
-    lateinit var selectedProductsForOrderList: ListView<Product>
-    @FXML
-    lateinit var payButton: Button
+    @FXML lateinit var existedOrdersButton: Button
+    @FXML lateinit var newOrderButton: Button
+    @FXML lateinit var logoutButton: Button
+    @FXML lateinit var backButton: Button
+    @FXML lateinit var productList: ListView<Product>
+    @FXML lateinit var messageLabel: Label
+    @FXML lateinit var existedOrdersList: ListView<Order>
+    @FXML lateinit var confirmOrderButton: Button
+    @FXML lateinit var selectedProductsForOrderList: ListView<Product>
+    @FXML lateinit var payButton: Button
     @FXML lateinit var messageConfirmedOrderLabel: Label
     @FXML lateinit var messagePaidOrderLabel: Label
 
@@ -78,7 +68,7 @@ class ClientViewController {
             }
         }
 
-        existedOrdersList.items.addAll(Vinoteka.bp.getClientOrders(client).getOr {
+        existedOrdersList.items.addAll(Client.getClientOrders(client).getOr {
             val errorAlert = Alert(Alert.AlertType.ERROR)
             errorAlert.headerText = "Error"
             errorAlert.contentText = it
@@ -164,7 +154,7 @@ class ClientViewController {
         selectedProductsForOrderList.isVisible = false
 
         val orderDetail = selectedProductsForOrderList.items.groupBy { it }.mapValues { (_, v) -> v.size }
-        Vinoteka.bp.formOrder(client, orderDetail)
+        Client.formOrder(client, orderDetail)
     }
 
     @FXML
@@ -180,7 +170,7 @@ class ClientViewController {
         selectedProductsForOrderList.isVisible = false
 
         val order = existedOrdersList.selectionModel.selectedItems.first()
-        Vinoteka.bp.payOrder(client, order).getOr {
+        Client.payOrder(client, order).getOr {
             val errorAlert = Alert(Alert.AlertType.ERROR)
             errorAlert.headerText = "Error"
             errorAlert.contentText = it
