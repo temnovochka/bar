@@ -4,10 +4,11 @@ import javafx.collections.FXCollections
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.control.*
-import org.jetbrains.exposed.dao.with
-import org.jetbrains.exposed.sql.transactions.transaction
 import vinoteka.gui.Vinoteka
-import vinoteka.model.*
+import vinoteka.model.Client
+import vinoteka.model.Manager
+import vinoteka.model.Order
+import vinoteka.model.OrderStatus
 
 class ManagerViewController {
     lateinit var manager: Manager
@@ -23,8 +24,8 @@ class ManagerViewController {
     @FXML lateinit var addIntoPurchaseButton: Button
     @FXML lateinit var ordersList: ListView<Order>
     @FXML lateinit var clientsList: ListView<Client>
-    @FXML lateinit var productsInStockList: ListView<Stock>
-    @FXML lateinit var selectedProductsForPurchaseList: ListView<Stock>
+    @FXML lateinit var productsInStockList: ListView<Pair<String, Int>>
+    @FXML lateinit var selectedProductsForPurchaseList: ListView<String>
     @FXML lateinit var confirmClientLabel: Label
     @FXML lateinit var confirmOrderLabel: Label
     @FXML lateinit var checkOrderLabel: Label
@@ -77,10 +78,9 @@ class ManagerViewController {
             object : ListCell<Client>() {
                 override fun updateItem(item: Client?, empty: Boolean) {
                     super.updateItem(item, empty)
-                    if (empty) text = null
-                    else {
-                        text =
-                            "client_id = ${item?.id}, birthday = ${item?.birthday?.toDate()}, document = ${item?.document}"
+                    text = when {
+                        empty -> null
+                        else -> "client_id = ${item?.id}, birthday = ${item?.birthday?.toDate()}, document = ${item?.document}"
                     }
                 }
             }
@@ -119,9 +119,9 @@ class ManagerViewController {
             object : ListCell<Order>() {
                 override fun updateItem(item: Order?, empty: Boolean) {
                     super.updateItem(item, empty)
-                    if (empty) text = null
-                    else {
-                        text = "order_id = ${item?.id}, status = ${item?.status}"
+                    text = when {
+                        empty -> null
+                        else -> "order_id = ${item?.id}, status = ${item?.status}"
                     }
                 }
             }
@@ -153,47 +153,48 @@ class ManagerViewController {
         selectedProductsForPurchaseList.isVisible = true
         addIntoPurchaseButton.isVisible = true
 
-        val list = FXCollections.observableArrayList<Stock>()
+        val list = FXCollections.observableArrayList<Pair<String, Int>>()
         productsInStockList.items = list
         productsInStockList.setCellFactory {
-            object : ListCell<Stock>() {
-                override fun updateItem(item: Stock?, empty: Boolean) {
+            object : ListCell<Pair<String, Int>>() {
+                override fun updateItem(item: Pair<String, Int>?, empty: Boolean) {
                     super.updateItem(item, empty)
-                    if (empty) text = null
-                    else {
-                        transaction {
-                            text = "product = ${item?.product?.name}, number = ${item?.number}"
-                        }
+                    text = when {
+                        empty -> null
+                        else -> "product = ${item?.first}, number = ${item?.second}"
                     }
                 }
             }
         }
 
-        val listForSelected = FXCollections.observableArrayList<Stock>()
+        val listForSelected = FXCollections.observableArrayList<String>()
         selectedProductsForPurchaseList.items = listForSelected
 
         selectedProductsForPurchaseList.setCellFactory {
-            object : ListCell<Stock>() {
-                override fun updateItem(item: Stock?, empty: Boolean) {
+            object : ListCell<String>() {
+                override fun updateItem(item: String?, empty: Boolean) {
                     super.updateItem(item, empty)
-                    if (empty) text = null
-                    else {
-                        transaction {
-                            text = "product = ${item?.product?.name}"
-                        }
+                    text = when {
+                        empty -> null
+                        else -> "product = $item"
                     }
                 }
             }
         }
 
-        transaction {
-            list.addAll(Stock.all())
-        }
+        list.addAll(Manager.getAllFromStock().getOr {
+            val errorAlert = Alert(Alert.AlertType.ERROR)
+            errorAlert.headerText = "Error"
+            errorAlert.contentText = it
+            errorAlert.showAndWait()
+            init(manager)
+            return
+        })
 
         productsInStockList.selectionModel.selectionMode = SelectionMode.MULTIPLE
 
         productsInStockList.setOnMouseClicked {
-            listForSelected.add(productsInStockList.selectionModel.selectedItems.first())
+            listForSelected.add(productsInStockList.selectionModel.selectedItems.first().first)
         }
     }
 

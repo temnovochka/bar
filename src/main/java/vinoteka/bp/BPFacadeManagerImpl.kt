@@ -4,9 +4,14 @@ import org.joda.time.DateTime
 import vinoteka.db.table.ClientTable
 import vinoteka.db.table.ListOfProductsTable
 import vinoteka.db.table.OrderTable
+import vinoteka.db.table.ProductTable
 import vinoteka.model.*
 
 object BPFacadeManagerImpl : BPFacadeManager {
+    override fun getAllFromStock() = bpTransaction {
+        Stock.all().map { it.product.name to it.number }
+    }
+
     override fun getClients() = bpTransaction {
         Client.find { ClientTable.isConfirmed eq false }.toList()
     }
@@ -65,16 +70,17 @@ object BPFacadeManagerImpl : BPFacadeManager {
         orders
     }
 
-    override fun makeManagerPurchase(intoPurchase: Map<Stock, Int>, manager: Manager) = bpTransaction {
+    override fun makeManagerPurchase(intoPurchase: Map<String, Int>, manager: Manager) = bpTransaction {
         val purchase = Purchase.new {
             this.manager = manager
             this.formedDate = DateTime.now()
             this.status = OrderStatus.NEW
         }
 
-        for ((stock, num) in intoPurchase) {
+        for ((prodName, num) in intoPurchase) {
+            val product = Product.find { ProductTable.name eq prodName }.first()
             val listOfProd = ListOfProducts.new {
-                this.product = stock.product
+                this.product = product
                 this.number = num
                 this.purchase = purchase
             }

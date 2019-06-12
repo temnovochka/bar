@@ -8,6 +8,6 @@ interface BPFacadeManager {
     fun confirmOrder(order: Order, manager: Manager): BPResult<Order>
     fun getManagerOrders(): BPResult<List<Order>>
     fun checkOrders(manager: Manager): BPResult<List<Order>>
-    //    fun getManagerProducts(): BPResult<List<Stock>>
-    fun makeManagerPurchase(intoPurchase: Map<Stock, Int>, manager: Manager): BPResult<Purchase>
+    fun makeManagerPurchase(intoPurchase: Map<String, Int>, manager: Manager): BPResult<Purchase>
+    fun getAllFromStock(): BPResult<List<Pair<String, Int>>>
 }

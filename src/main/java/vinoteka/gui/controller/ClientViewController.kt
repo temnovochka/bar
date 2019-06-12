@@ -76,9 +76,9 @@ class ClientViewController {
             object : ListCell<Order>() {
                 override fun updateItem(item: Order?, empty: Boolean) {
                     super.updateItem(item, empty)
-                    if (empty) text = null
-                    else {
-                        text = "order_id = ${item?.id}, status = ${item?.status}, paid = ${item?.paymentStatus}"
+                    text = when {
+                        empty -> null
+                        else -> "order_id = ${item?.id}, status = ${item?.status}, paid = ${item?.paymentStatus}"
                     }
                 }
             }
@@ -115,9 +115,9 @@ class ClientViewController {
             object : ListCell<Product>() {
                 override fun updateItem(item: Product?, empty: Boolean) {
                     super.updateItem(item, empty)
-                    if (empty) text = null
-                    else {
-                        text = item?.name
+                    text = when {
+                        empty -> null
+                        else -> item?.name
                     }
                 }
             }
@@ -130,9 +130,9 @@ class ClientViewController {
             object : ListCell<Product>() {
                 override fun updateItem(item: Product?, empty: Boolean) {
                     super.updateItem(item, empty)
-                    if (empty) text = null
-                    else {
-                        text = item?.name
+                    text = when {
+                        empty -> null
+                        else -> item?.name
                     }
                 }
             }
