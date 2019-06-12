@@ -1,12 +1,13 @@
 package vinoteka.gui.controller
 
+import javafx.collections.FXCollections
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
-import vinoteka.gui.Vinoteka
-import javafx.collections.FXCollections
 import javafx.scene.control.*
-import org.jetbrains.exposed.sql.transactions.transaction
-import vinoteka.model.*
+import vinoteka.gui.Vinoteka
+import vinoteka.model.Client
+import vinoteka.model.Order
+import vinoteka.model.Product
 
 
 class ClientViewController {
@@ -52,7 +53,6 @@ class ClientViewController {
                 errorAlert.headerText = "Error"
                 errorAlert.contentText = it
                 errorAlert.showAndWait()
-                init(client)
                 return
             }) {
             newOrderButton.isDisable = true
@@ -138,9 +138,15 @@ class ClientViewController {
             }
         }
 
-        transaction {
-            list.addAll(Product.all().map { it })
-        }
+        list.addAll(
+            Client.getAllBarProducts().getOr {
+                val errorAlert = Alert(Alert.AlertType.ERROR)
+                errorAlert.headerText = "Error"
+                errorAlert.contentText = it
+                errorAlert.showAndWait()
+                init(client)
+                return
+            })
 
         productList.selectionModel.selectionMode = SelectionMode.MULTIPLE
 

@@ -7,6 +7,10 @@ import vinoteka.db.table.OrderTable
 import vinoteka.model.*
 
 object BPFacadeClientImpl : BPFacadeClient {
+    override fun getAllBarProducts() = bpTransaction {
+        Product.all().map { it }
+    }
+
     override fun isOrderForPay(order: Order) = bpTransaction {
         order.status == OrderStatus.DONE && order.paymentStatus == PaymentStatus.NOT_PAID
     }
