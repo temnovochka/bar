@@ -22,14 +22,18 @@ class ManagerViewController {
     @FXML lateinit var confirmOrderButton: Button
     @FXML lateinit var confirmClientButton: Button
     @FXML lateinit var addIntoPurchaseButton: Button
+    @FXML lateinit var putPurchasesIntoStockButton: Button
+
     @FXML lateinit var ordersList: ListView<Order>
     @FXML lateinit var clientsList: ListView<Client>
     @FXML lateinit var productsInStockList: ListView<Pair<String, Int>>
     @FXML lateinit var selectedProductsForPurchaseList: ListView<String>
+
     @FXML lateinit var confirmClientLabel: Label
     @FXML lateinit var confirmOrderLabel: Label
     @FXML lateinit var checkOrderLabel: Label
     @FXML lateinit var addIntoPurchaseLabel: Label
+    @FXML lateinit var putPurchasesIntoStockLabel: Label
 
     fun init(manager: Manager) {
         this.manager = manager
@@ -50,6 +54,8 @@ class ManagerViewController {
         addIntoPurchaseButton.isVisible = false
         selectedProductsForPurchaseList.isVisible = false
         addIntoPurchaseLabel.isVisible = false
+        putPurchasesIntoStockButton.isVisible = true
+        putPurchasesIntoStockLabel.isVisible = false
     }
 
     @FXML
@@ -64,6 +70,7 @@ class ManagerViewController {
 
     @FXML
     fun onConfirmNewClientsButtonClicked(actionEvent: ActionEvent) {
+        putPurchasesIntoStockButton.isVisible = false
         backButton.isVisible = true
         confirmNewClientsButton.isVisible = false
         checkAllRegisteredOrdersButton.isVisible = false
@@ -99,12 +106,11 @@ class ManagerViewController {
             val client = clientsList.selectionModel.selectedItems.first()
             confirmClientButton.isVisible = client.isConfirmed == false
         }
-
-
     }
 
     @FXML
     fun onRegisterOrderButtonClicked(actionEvent: ActionEvent) {
+        putPurchasesIntoStockButton.isVisible = false
         backButton.isVisible = true
         confirmNewClientsButton.isVisible = false
         checkAllRegisteredOrdersButton.isVisible = false
@@ -144,6 +150,7 @@ class ManagerViewController {
 
     @FXML
     fun onFormNewPurchaseButtonClicked(actionEvent: ActionEvent) {
+        putPurchasesIntoStockButton.isVisible = false
         backButton.isVisible = true
         confirmNewClientsButton.isVisible = false
         checkAllRegisteredOrdersButton.isVisible = false
@@ -242,6 +249,7 @@ class ManagerViewController {
 
     @FXML
     fun onCheckAllRegisteredOrdersButtonClicked(actionEvent: ActionEvent) {
+        putPurchasesIntoStockButton.isVisible = false
         backButton.isVisible = true
         confirmNewClientsButton.isVisible = false
         checkAllRegisteredOrdersButton.isVisible = false
@@ -275,6 +283,26 @@ class ManagerViewController {
 
         val intoPurchase = selectedProductsForPurchaseList.items.groupBy { it }.mapValues { (_, v) -> v.size }
         Manager.makeManagerPurchase(intoPurchase, manager).getOr {
+            val errorAlert = Alert(Alert.AlertType.ERROR)
+            errorAlert.headerText = "Error"
+            errorAlert.contentText = it
+            errorAlert.showAndWait()
+            init(manager)
+            return
+        }
+    }
+
+    fun onPutPurchasesIntoStockButtonClicked(actionEvent: ActionEvent) {
+        putPurchasesIntoStockButton.isVisible = false
+        backButton.isVisible = true
+        confirmNewClientsButton.isVisible = false
+        checkAllRegisteredOrdersButton.isVisible = false
+        registerOrderButton.isVisible = false
+        formNewPurchaseButton.isVisible = false
+        ordersList.isVisible = false
+        putPurchasesIntoStockLabel.isVisible = true
+
+        Manager.putDonePurchasesIntoStock(manager).getOr {
             val errorAlert = Alert(Alert.AlertType.ERROR)
             errorAlert.headerText = "Error"
             errorAlert.contentText = it

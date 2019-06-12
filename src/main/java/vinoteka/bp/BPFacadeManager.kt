@@ -10,4 +10,5 @@ interface BPFacadeManager {
     fun checkOrders(manager: Manager): BPResult<List<Order>>
     fun makeManagerPurchase(intoPurchase: Map<String, Int>, manager: Manager): BPResult<Purchase>
     fun getAllFromStock(): BPResult<List<Pair<String, Int>>>
+    fun putDonePurchasesIntoStock(manager: Manager): BPResult<Unit>
 }

@@ -11,4 +11,5 @@ object PurchaseTable : IntIdTable("purchase") {
     val formedDate = date("formed_date")
     val executionDate = date("execution_date").nullable()
     val status = enumerationByName("status", 20, OrderStatus::class)
+    val isAddedIntoStock = bool("is_added_into_stock").default(false)
 }

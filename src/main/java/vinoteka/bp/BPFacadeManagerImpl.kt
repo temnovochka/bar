@@ -1,13 +1,41 @@
 package vinoteka.bp
 
+import org.jetbrains.exposed.sql.and
 import org.joda.time.DateTime
-import vinoteka.db.table.ClientTable
-import vinoteka.db.table.ListOfProductsTable
-import vinoteka.db.table.OrderTable
-import vinoteka.db.table.ProductTable
+import vinoteka.db.table.*
 import vinoteka.model.*
 
 object BPFacadeManagerImpl : BPFacadeManager {
+    override fun putDonePurchasesIntoStock(manager: Manager) = bpTransaction {
+        val purchases = Purchase.find {
+            PurchaseTable.status eq OrderStatus.DONE and (PurchaseTable.isAddedIntoStock eq false)
+        }
+        val stockData = Stock.all().map { it.product to it.number }.toMap().toMutableMap()
+        val stockDataForSave = Stock.all().map { it.product to it }.toMap().toMutableMap()
+        for (purchase in purchases) {
+            val products = ListOfProducts.find { ListOfProductsTable.purchase eq purchase.id }.toList()
+            for (prod in products)
+                stockData[prod.product] = stockData.getOrDefault(prod.product, 0) + prod.number
+            purchase.isAddedIntoStock = true
+        }
+        for ((k, v) in stockData)
+            when (stockDataForSave[k]) {
+                null -> {
+                    Stock.new {
+                        product=k
+                        number=v
+                        this.manager=manager
+                        dateUpdate= DateTime.now()
+                    }
+                }
+                else -> {
+                    stockDataForSave[k]!!.number = v
+                    stockDataForSave[k]!!.manager = manager
+                    stockDataForSave[k]!!.dateUpdate= DateTime.now()
+                }
+            }
+    }
+
     override fun getAllFromStock() = bpTransaction {
         Stock.all().map { it.product.name to it.number }
     }

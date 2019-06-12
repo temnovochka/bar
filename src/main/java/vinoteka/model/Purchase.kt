@@ -14,4 +14,5 @@ class Purchase(id: EntityID<Int>) : IntEntity(id) {
     var formedDate by PurchaseTable.formedDate
     var executionDate by PurchaseTable.executionDate
     var status by PurchaseTable.status
+    var isAddedIntoStock by PurchaseTable.isAddedIntoStock
 }
