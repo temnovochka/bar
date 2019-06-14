@@ -10,30 +10,32 @@ object BPFacadeManagerImpl : BPFacadeManager {
         val purchases = Purchase.find {
             PurchaseTable.status eq OrderStatus.DONE and (PurchaseTable.isAddedIntoStock eq false)
         }
-        val stockData = Stock.all().map { it.product to it.number }.toMap().toMutableMap()
-        val stockDataForSave = Stock.all().map { it.product to it }.toMap().toMutableMap()
+        val stockData = Stock.all().map { it.product to it.number }.toMap(mutableMapOf())
+        val stockDataForSave = Stock.all().map { it.product to it }.toMap()
         for (purchase in purchases) {
             val products = ListOfProducts.find { ListOfProductsTable.purchase eq purchase.id }.toList()
             for (prod in products)
                 stockData[prod.product] = stockData.getOrDefault(prod.product, 0) + prod.number
             purchase.isAddedIntoStock = true
         }
-        for ((k, v) in stockData)
-            when (stockDataForSave[k]) {
+        for ((k, v) in stockData) {
+            val stock = stockDataForSave[k]
+            when (stock) {
                 null -> {
                     Stock.new {
-                        product=k
-                        number=v
-                        this.manager=manager
-                        dateUpdate= DateTime.now()
+                        product = k
+                        number = v
+                        this.manager = manager
+                        dateUpdate = DateTime.now()
                     }
                 }
                 else -> {
-                    stockDataForSave[k]!!.number = v
-                    stockDataForSave[k]!!.manager = manager
-                    stockDataForSave[k]!!.dateUpdate= DateTime.now()
+                    stock.number = v
+                    stock.manager = manager
+                    stock.dateUpdate = DateTime.now()
                 }
             }
+        }
     }
 
     override fun getAllFromStock() = bpTransaction {
